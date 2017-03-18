@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
   resources :people
   resources :tables
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  namespace :api do
+    resources :tables do
+      resources :seats
+    end
+    resources :people
+  end
 end
