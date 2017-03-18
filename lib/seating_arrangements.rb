@@ -48,9 +48,9 @@ module SeatingArrangements
 
   # given a list of seats and which one to delete
   # returns true if the seat can be deleted leaving a valid table
-  def can_be_deleted seats, to_be_deleted
+  def can_be_unseated seats, to_be_unseated
     new_list = seats.dup
-    new_list.delete to_be_deleted
+    new_list.delete to_be_unseated
     check_table(new_list).empty?
   end
 end

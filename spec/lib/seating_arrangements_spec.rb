@@ -98,16 +98,16 @@ RSpec.describe SeatingArrangements do
     end
   end
 
-  describe 'can_be_deleted' do
+  describe 'can_be_unseated' do
     it 'returns true' do
       seats = [michael_seat, sara_seat, sam_seat, chris_seat]
-      result = SeatingArrangements.can_be_deleted seats, sam_seat
+      result = SeatingArrangements.can_be_unseated seats, sam_seat
       expect(result).to eq true
     end
 
     it 'returns false' do
       seats = [michael_seat, sara_seat, sam_seat, chris_seat]
-      result = SeatingArrangements.can_be_deleted seats, sara_seat
+      result = SeatingArrangements.can_be_unseated seats, sara_seat
       expect(result).to eq false
     end
   end
