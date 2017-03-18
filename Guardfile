@@ -35,6 +35,7 @@ guard :rspec, cmd: "bundle exec rspec" do
   watch(rspec.spec_helper) { rspec.spec_dir }
   watch(rspec.spec_support) { rspec.spec_dir }
   watch(rspec.spec_files)
+  watch(%r{^spec/.+_spec\.rb})
 
   # Ruby files
   ruby = dsl.ruby
@@ -49,6 +50,7 @@ guard :rspec, cmd: "bundle exec rspec" do
     [
       rspec.spec.call("routing/#{m[1]}_routing"),
       rspec.spec.call("controllers/#{m[1]}_controller"),
+      rspec.spec.call("controllers/api/#{m[1]}_controller"),
       rspec.spec.call("acceptance/#{m[1]}")
     ]
   end
