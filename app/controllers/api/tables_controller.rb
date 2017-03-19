@@ -1,6 +1,5 @@
 class Api::TablesController < ApiController
   before_action :set_table, only: [:show, :update, :destroy]
-#  after_action :render_table, only: [:create, :show, :update, :destroy]
 
   # GET /api/tables
   def index
@@ -33,10 +32,6 @@ class Api::TablesController < ApiController
   end
 
   private
-    def render_table
-      render json: @table
-    end
-
     def set_table
       if @table = Table.find_by(id: params[:id])
         # continue
