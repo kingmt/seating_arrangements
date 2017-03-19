@@ -36,15 +36,26 @@ describe 'People API' do
     expect(json.size).to eq 2
   end
 
-  it 'creates new person' do
-    expect {
-      post '/api/people', params: {person: {name: "Joe", age: 25}}
-    }.to change{Person.count}.by 1
-    json = JSON.parse response.body
-    expect(response.status).to eq 200
-    # double checking that the last person created was the one returned
-    person = Person.last
-    expect(json['id'].to_i).to eq person.id
+  describe 'create' do
+    it 'creates new person' do
+      expect {
+        post '/api/people', params: {person: {name: "Joe", age: 25}}
+      }.to change{Person.count}.by 1
+      json = JSON.parse response.body
+      expect(response.status).to eq 200
+      # double checking that the last person created was the one returned
+      person = Person.last
+      expect(json['id'].to_i).to eq person.id
+    end
+
+    it 'errors' do
+      expect {
+        post '/api/people', params: {person: {name: "Joe"}}
+      }.to change{Person.count}.by 0
+      json = JSON.parse response.body
+      expect(response.status).to eq 422
+      expect(json['errors']).to eq ["Age can't be blank"]
+    end
   end
 
   it 'shows person' do
@@ -86,8 +97,7 @@ describe 'People API' do
       expect {
         delete "/api/people/#{person.id}"
       }.to change{Person.count}.by -1
-      json = JSON.parse response.body
-      expect(response.status).to eq 200
+      expect(response.status).to eq 204
     end
 
     it 'fails on seated person' do

@@ -9,8 +9,14 @@ class Api::PeopleController < ApiController
 
   # POST /api/people
   def create
-    @person = Person.create person_params
-    render json: @person
+
+    @person = Person.new(person_params)
+    if @person.valid?
+      @person.save
+      render json: @person
+    else
+      render json: {errors: @person.errors.full_messages}, status: 422
+    end
   end
 
   # GET /api/people/:id
@@ -36,7 +42,7 @@ class Api::PeopleController < ApiController
       render json: {errors: 'Cannot delete a seated person'}, status: 422
     else
       @person.destroy
-      render json: @person
+      render nothing: true, status: 204
     end
   end
 
