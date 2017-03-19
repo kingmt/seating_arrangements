@@ -55,7 +55,7 @@ class Api::TablesController < ApiController
   # DELETE /api/tables/:id
   def destroy
     @table.destroy
-    render json: @table
+    head :no_content
   end
 
   private

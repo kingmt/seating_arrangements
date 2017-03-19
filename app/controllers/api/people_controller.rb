@@ -42,7 +42,7 @@ class Api::PeopleController < ApiController
       render json: {errors: 'Cannot delete a seated person'}, status: 422
     else
       @person.destroy
-      render nothing: true, status: 204
+      head :no_content
     end
   end
 

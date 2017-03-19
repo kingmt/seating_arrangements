@@ -169,8 +169,7 @@ describe 'Tables API' do
       expect {
         delete "/api/tables/#{table.id}"
       }.to change{Table.count}.by -1
-      json = JSON.parse response.body
-      expect(response.status).to eq 200
+      expect(response.status).to eq 204
     end
 
     it 'with people' do
@@ -184,8 +183,7 @@ describe 'Tables API' do
           delete "/api/tables/#{table.id}"
         }.to change{Table.count}.by -1
       }.to change{Seat.count}.by -2
-      json = JSON.parse response.body
-      expect(response.status).to eq 200
+      expect(response.status).to eq 204
     end
   end
 end
