@@ -10,11 +10,15 @@ The “People” that sit at your tables need only have a name and age propertie
 A seating arrangement is valid under the following conditions:
 
 * For any two people sitting next to one another, they must be within a 5 year age range.
+
   Ex: Age 30 -- Age 38 is invalid because Math.Abs(38 - 30) > 5
+
   Ex: Age 30 -- Age 35 is valid because Math.Abs(35 - 30) <= 5
 
 * A person cannot sit in between two people that are older than them.
+
   Ex: Age 20 -- Age 17 -- Age 22 is invalid because 20 > 17 && 22 > 17.
+  
   Ex: Age 20 -- Age 17 -- Age 15 is valid because Age15 < Age17 < Age20
 
 
