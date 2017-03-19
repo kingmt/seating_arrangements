@@ -58,6 +58,111 @@ describe 'Tables API' do
     expect(json['id'].to_i).to eq table.id
   end
 
+  describe 'bulk update a table' do
+    let!(:table)  { Table.create }
+    let!(:table2) { Table.create }
+    let!(:sam)     { Person.create name: 'Sam',     age: 22 }
+    let!(:chris)   { Person.create name: 'Chris',   age: 21 }
+    let!(:michael) { Person.create name: 'Michael', age: 19 }
+    let!(:sara)    { Person.create name: 'Sara',    age: 19 }
+    let!(:john)    { Person.create name: 'John',    age: 30 }
+
+    context 'errors' do
+      it 'when people param is missing' do
+        put "/api/tables/#{table.id}"
+        json = JSON.parse response.body
+        expect(response.status).to eq 422
+        expect(json['errors']).to eq 'Invalid parameters'
+      end
+
+      it 'when people param is not a list' do
+        put "/api/tables/#{table.id}",
+            params: {people: 1}
+        json = JSON.parse response.body
+        expect(response.status).to eq 422
+        expect(json['errors']).to eq 'Invalid parameters'
+      end
+
+      it 'when there is a non-existant person' do
+        put "/api/tables/#{table.id}",
+            params: {people: [99, 100]}
+        json = JSON.parse response.body
+        expect(response.status).to eq 422
+        expect(json['errors']).to eq 'Non-existant people sent'
+      end
+
+      context 'people seated at other tables' do
+        it 'one' do
+          seat = Seat.create table: table2, person: sara
+          put "/api/tables/#{table.id}",
+              params: {people: [michael.id, sara.id, sam.id, chris.id]}
+          json = JSON.parse response.body
+          expect(response.status).to eq 422
+          expect(json['errors']).to eq 'Sara has already been seated at another table'
+        end
+
+        it '2' do
+          seat = Seat.create table: table2, person: sara
+          seat = Seat.create table: table2, person: sam
+          put "/api/tables/#{table.id}",
+              params: {people: [michael.id, sara.id, sam.id, chris.id]}
+          json = JSON.parse response.body
+          expect(response.status).to eq 422
+          expect(json['errors']).to eq 'Sam and Sara have already been seated at another table'
+        end
+
+        it '3' do
+          seat = Seat.create table: table2, person: sara
+          seat = Seat.create table: table2, person: sam
+          seat = Seat.create table: table2, person: michael
+          put "/api/tables/#{table.id}",
+              params: {people: [michael.id, sara.id, sam.id, chris.id]}
+          json = JSON.parse response.body
+          expect(response.status).to eq 422
+          expect(json['errors']).to eq 'Michael, Sam, and Sara have already been seated at another table'
+        end
+      end
+
+      it 'when it would result in an invalid table' do
+        put "/api/tables/#{table.id}",
+            params: {people: [michael.id, sara.id, john.id, chris.id]}
+        json = JSON.parse response.body
+        expect(response.status).to eq 422
+        expect(json['errors']).to eq "Unable to seat those people in that order"
+      end
+    end
+
+    context 'success' do
+      it 'when table was empty' do
+        put "/api/tables/#{table.id}",
+            params: {people: [michael.id, sara.id, sam.id, chris.id]}
+        json = JSON.parse response.body
+        expect(response.status).to eq 200
+        # this verification is a little bit harder
+        # need to verify that Jenny was placed between Sara and Sam
+        # but I don't want to make the test break when
+        # table serialization is changed
+        result_names = json['seats'].collect{|s| s['name']}
+        expect(result_names).to eq %w( Michael Sara Sam Chris)
+      end
+
+      it 'when table had previous seats' do
+        seat = Seat.create table: table, person: sara
+        seat = Seat.create table: table, person: michael
+        put "/api/tables/#{table.id}",
+            params: {people: [michael.id, sara.id, sam.id, chris.id]}
+        json = JSON.parse response.body
+        expect(response.status).to eq 200
+        # this verification is a little bit harder
+        # need to verify that Jenny was placed between Sara and Sam
+        # but I don't want to make the test break when
+        # table serialization is changed
+        result_names = json['seats'].collect{|s| s['name']}
+        expect(result_names).to eq %w( Michael Sara Sam Chris)
+      end
+    end
+  end
+
   describe 'destroy' do
     it 'empty table' do
       table = Table.create
