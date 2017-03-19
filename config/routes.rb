@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-  resources :people
-  resources :tables
+  #resources :people
+  #resources :tables
 
   namespace :api do
-    resources :tables do
-      resources :seats
+    resources :tables, only: [:create, :update, :index, :show, :destroy] do
+      resources :seats, only: [:create, :update, :destroy]
     end
-    resources :people
+    resources :people, only: [:create, :index, :update, :destroy]
   end
 end
