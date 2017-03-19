@@ -51,7 +51,9 @@ Respond with helpful error messages when updates cannot be performed.
 #### **Tables**
 
 * **Create Table**
+
   POST /api/table
+
   creates a new table and returns a JSON object containing the table's information
   * Params:
     none
@@ -63,8 +65,10 @@ Respond with helpful error messages when updates cannot be performed.
 }
 ```
 * **Get Table**
-GET /api/tables/:id
-returns a JSON object listing all the people at the table with their positions
+
+  GET /api/tables/:id
+
+  returns a JSON object listing all the people at the table with their positions
   * Params:
     id of the table
   * Response:
