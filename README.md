@@ -10,16 +10,12 @@ The “People” that sit at your tables need only have a name and age propertie
 A seating arrangement is valid under the following conditions:
 
 * For any two people sitting next to one another, they must be within a 5 year age range.
-
-  Ex: Age 30 -- Age 38 is invalid because Math.Abs(38 - 30) > 5
-
-  Ex: Age 30 -- Age 35 is valid because Math.Abs(35 - 30) <= 5
+  * Ex: Age 30 -- Age 38 is invalid because Math.Abs(38 - 30) > 5
+  * Ex: Age 30 -- Age 35 is valid because Math.Abs(35 - 30) <= 5
 
 * A person cannot sit in between two people that are older than them.
-
-  Ex: Age 20 -- Age 17 -- Age 22 is invalid because 20 > 17 && 22 > 17.
-  
-  Ex: Age 20 -- Age 17 -- Age 15 is valid because Age15 < Age17 < Age20
+  * Ex: Age 20 -- Age 17 -- Age 22 is invalid because 20 > 17 && 22 > 17.
+  * Ex: Age 20 -- Age 17 -- Age 15 is valid because Age15 < Age17 < Age20
 
 
 There is no limit to the amount of people who sit at a table so long as the above constraints are met.
@@ -51,10 +47,8 @@ Respond with helpful error messages when updates cannot be performed.
 #### **Tables**
 
 * **Create Table**
-
-  POST /api/table
-
-  creates a new table and returns a JSON object containing the table's information
+  * POST /api/table
+  * creates a new table and returns a JSON object containing the table's information
   * Params:
     none
   * Response:
@@ -65,10 +59,8 @@ Respond with helpful error messages when updates cannot be performed.
 }
 ```
 * **Get Table**
-
-  GET /api/tables/:id
-
-  returns a JSON object listing all the people at the table with their positions
+  * GET /api/tables/:id
+  * returns a JSON object listing all the people at the table with their positions
   * Params:
     id of the table
   * Response:
@@ -81,16 +73,16 @@ Respond with helpful error messages when updates cannot be performed.
 }
 ```
 * **Delete a Table**
-    DELETE /api/tables/:id
-    returns a 204 and unseats all the people who were at the table
+  *   DELETE /api/tables/:id
+  *   returns a 204 and unseats all the people who were at the table
   * Params:
      id of the table
   * Response:
     empty body with a status code of 204
 
 * **Seat an Entire Table**
-    Update all people at the table required param is a list of all people to be seated at the table in position order
-    PUT /api/tables/:id
+  * Update all people at the table required param is a list of all people to be seated at the table in position order
+  * PUT /api/tables/:id
   * Required Params:
     table id in the url
     an array of the person ids to be seated in the order to be seated
@@ -105,7 +97,7 @@ Respond with helpful error messages when updates cannot be performed.
 
 #### **People**
 * **Create a Person**
-    POST /api/people
+  *  POST /api/people
   * Required Params:
     `{"person":{"name": "Joe", "age": 27}}`
   * Response:
@@ -132,8 +124,8 @@ Error:
 ```
 
 * **Get All People**
-GET /api/people
-             returns JSON object of all people in the system
+  * GET /api/people
+  * returns JSON object of all people in the system
   * Params: none
   * Response:
 ```json
@@ -154,8 +146,8 @@ GET /api/people
 ```
 
 * **Get the Information About a Single Person**
-    GET /api/people/:id
-    returns JSON object of that person's information
+  * GET /api/people/:id
+  * returns JSON object of that person's information
   * Params:
     id of the person in the url
   * Success Response:
@@ -164,8 +156,8 @@ GET /api/people
     404 status code when the person does not exist
 
 * **Update a Person**
-    PUT /api/people/:id
-     update the information on a person
+  * PUT /api/people/:id
+  * update the information on a person
   * Restrictions:
     A seated person cannot be updated
   * Required Params:
@@ -178,8 +170,8 @@ GET /api/people
     422 `{"errors": "Cannot update a seated person"}`
 
 * **Delete a Person**
-    DELETE /api/people/:id
-    removes the person from the system and responds with a status code of 204
+  * DELETE /api/people/:id
+  * removes the person from the system and responds with a status code of 204
   * Restrictions:
     A seated person cannot be deleted
   * Params:
@@ -194,11 +186,11 @@ GET /api/people
 Adding and removing people from tables
 
 * **Add a Person to a Table**
-    POST /api/tables/:table_id/seats/
-    Optional param of the position of the person, if no  position is given the system will attempt to add the  person in the first valid position
+  * POST /api/tables/:table_id/seats/
+  * Optional param of the position of the person, if no  position is given the system will attempt to add the  person in the first valid position
   * Required Params:
     table id in the url
-    * Optional Params
+  * Optional Params
   ` {"position": 3}`
   * Success Response:
     same as GET /api/table/:id
@@ -208,8 +200,8 @@ Adding and removing people from tables
     `{ "errors": "Person cannot be seated at that position" }`
 
 * **Change a person's position at the table**
-    PUT /api/tables/:table_id/seats/:id
-    returns a JSON object listing all the people at the table  with their positions or an error message
+  * PUT /api/tables/:table_id/seats/:id
+  * returns a JSON object listing all the people at the table  with their positions or an error message
   * Required Params:
     table id and seat id in the url
   ` {"position": 3}`
@@ -219,7 +211,7 @@ Adding and removing people from tables
    `{ "errors": "Person cannot be seated at that position" }`
 
 * **Remove a person from a table**
-    DELETE /api/tables/:table_id/seats/:id
+  * DELETE /api/tables/:table_id/seats/:id
   * Required Params:
     table id and seat id in the url
   * Success Response:
