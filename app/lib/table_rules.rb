@@ -1,8 +1,7 @@
-require 'seating_rules'
 # built as a module since the logic doesn't truely belong
 # in the models
 
-module SeatingArrangements
+module TableRules
   extend self
 
   # receives an array of seats

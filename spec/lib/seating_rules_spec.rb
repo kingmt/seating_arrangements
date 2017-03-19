@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'seating_rules'
 
 RSpec.describe SeatingRules do
   let(:sam)     { Person.new name: 'Sam',     age: 22 }

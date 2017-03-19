@@ -1,7 +1,6 @@
 require 'rails_helper'
-require 'seating_arrangements'
 
-RSpec.describe SeatingArrangements do
+RSpec.describe TableRules do
   let(:table) { Table.create }
 
   let(:sam)     { Person.create name: 'Sam',     age: 22 }
@@ -23,21 +22,21 @@ RSpec.describe SeatingArrangements do
       it 'for single seat' do
         seats = [michael_seat]
         expected = []
-        result = SeatingArrangements.check_table seats
+        result = TableRules.check_table seats
         expect(result).to eq expected
       end
 
       it 'for 2 seats' do
         seats = [michael_seat, sara_seat]
         expected = []
-        result = SeatingArrangements.check_table seats
+        result = TableRules.check_table seats
         expect(result).to eq expected
       end
 
       it 'for more seats' do
         seats = [michael_seat, sara_seat, sam_seat, chris_seat]
         expected = []
-        result = SeatingArrangements.check_table seats
+        result = TableRules.check_table seats
         expect(result).to eq expected
       end
     end
@@ -45,7 +44,7 @@ RSpec.describe SeatingArrangements do
     it 'returns 1 error' do
       seats = [michael_seat, sam_seat, matt_seat, chris_seat]
       expected = ["Michael is younger than both Chris and Sam"]
-      result = SeatingArrangements.check_table seats
+      result = TableRules.check_table seats
       expect(result).to eq expected
     end
 
@@ -58,7 +57,7 @@ RSpec.describe SeatingArrangements do
                   "The age difference between Chris and John is greater than 5",
                   "The age difference between John and Chris is greater than 5"
                  ]
-      result = SeatingArrangements.check_table seats
+      result = TableRules.check_table seats
       # Have to break all the checks apart since rspec is abreviating the diff
       expect(result.size).to eq expected.size
       expect(result[0]).to eq expected[0]
@@ -73,7 +72,7 @@ RSpec.describe SeatingArrangements do
   describe 'autoplace' do
     it 'places the new person at the front' do
       seats = [michael_seat, sara_seat, chris_seat]
-      result = SeatingArrangements.autoplace seats, sam
+      result = TableRules.autoplace seats, sam
       # need to match internals since any new seat object created
       # here won't be the same seat object created in autoplace
       expect(result[0].person).to eq sam
@@ -83,7 +82,7 @@ RSpec.describe SeatingArrangements do
 
     it 'places the new person in the middle' do
       seats = [michael_seat, sara_seat, sam_seat, chris_seat]
-      result = SeatingArrangements.autoplace seats, matt
+      result = TableRules.autoplace seats, matt
       # expect Matt to be between Sam and Chris
       # so first 3 seats are unchanged
       expect(result.slice(0,3)).to eq seats.slice(0,3)
@@ -93,7 +92,7 @@ RSpec.describe SeatingArrangements do
 
     it 'cannot place the new person' do
       seats = [michael_seat, sara_seat, chris_seat]
-      result = SeatingArrangements.autoplace seats, john
+      result = TableRules.autoplace seats, john
       expect(result).to eq nil
     end
   end
@@ -101,13 +100,13 @@ RSpec.describe SeatingArrangements do
   describe 'can_be_unseated' do
     it 'returns true' do
       seats = [michael_seat, sara_seat, sam_seat, chris_seat]
-      result = SeatingArrangements.can_be_unseated seats, sam_seat
+      result = TableRules.can_be_unseated seats, sam_seat
       expect(result).to eq true
     end
 
     it 'returns false' do
       seats = [michael_seat, sara_seat, sam_seat, chris_seat]
-      result = SeatingArrangements.can_be_unseated seats, sara_seat
+      result = TableRules.can_be_unseated seats, sara_seat
       expect(result).to eq false
     end
   end
