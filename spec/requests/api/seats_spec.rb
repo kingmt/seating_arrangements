@@ -10,6 +10,13 @@ describe 'Seats API' do
   let!(:sara)    { Person.create name: 'Sara',    age: 19 }
   let!(:jenny)   { Person.create name: 'Jenny',   age: 23 }
 
+  it 'returns 404 if table doesnt exist' do
+      post "/api/tables/99/seats"
+      json = JSON.parse response.body
+      expect(response.status).to eq 404
+      expect(json['errors']).to eq "Table does not exist"
+  end
+
   describe 'POST /api/table/:table_id/seats' do
     it 'returns error if person already seated' do
       Seat.create table: table, person: john
@@ -101,6 +108,13 @@ describe 'Seats API' do
     let!(:seat3) { Seat.create person: jenny,   table: table }
     let!(:seat4) { Seat.create person: sam,     table: table }
     let!(:seat5) { Seat.create person: chris,   table: table }
+
+    it 'returns an error is position is not given' do
+      put "/api/tables/#{table.id}/seats/#{seat1.id}"
+      json = JSON.parse response.body
+      expect(response.status).to eq 422
+      expect(json['errors']).to eq 'Position is required'
+    end
 
     it 'returns error is seat does not exist' do
       put "/api/tables/#{table.id}/seats/99",
