@@ -24,17 +24,27 @@ module TableRules
     errors.flatten.compact
   end
 
-  # given a list of seats and a person to add
+  # given an array of seats and a person to add
   # attempt to place the new seat
-  # returns a new list of seats if successful
+  # returns a new list of seats if successful and updates the table
   # returns nil if unsuccessful
-  def autoplace seats, new_peep
-    # brute force, naive implementation
+  # FIXME brute force, naive implementation
+  # better solution would be to iterate through the list and
+  # get the 2 elements to the right R1, R2
+  # and the 2 elements to the left L1, L2 and then check the 2 combinations
+  # SeatingRules.check_all_rules(L2, L1, R1)
+  # SeatingRules.check_all_rules(L1, R1, R2)
+  # if both are valid then it can be deleted
+  def autoplace! seats, new_peep
     new_seat = Seat.new table: (seats.first.table), person: new_peep
     result = seats.each_index do |index|
                new_list = seats.dup
+               # array.insert inserts the new element BEFORE the index
                new_list.insert index, new_seat
                if check_table(new_list).empty?
+                 # since acts_as_list is 1 indexed need index + 1
+                 new_seat.position = index + 1
+                 new_seat.save
                  break new_list
                end
              end
@@ -45,11 +55,22 @@ module TableRules
     end
   end
 
-  # given a list of seats and which one to delete
+  # given an array of seats and which one to check
   # returns true if the seat can be deleted leaving a valid table
+  # FIXME brute force naive solution
+  # better solution would be to get the 2 elements to the right R1, R2
+  # and the 2 elements to the left L1, L2 and then check the 2 combinations
+  # SeatingRules.check_all_rules(L2, L1, R1)
+  # SeatingRules.check_all_rules(L1, R1, R2)
+  # if both are valid then it can be deleted
   def can_be_unseated seats, to_be_unseated
-    new_list = seats.dup
-    new_list.delete to_be_unseated
-    check_table(new_list).empty?
+    # special case
+    if seats.size <= 2
+      true
+    else
+      new_list = seats.dup
+      new_list.delete to_be_unseated
+      check_table(new_list).empty?
+    end
   end
 end

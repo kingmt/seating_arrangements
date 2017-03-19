@@ -35,6 +35,8 @@ module SeatingRules
 
   # receives 3 people records
   # returns an error string or nil
+  # QUESTION if there are only 2 people at the table, so left and
+  #          right are the same person can there be a valley?
   def check_valley left, center, right
     if left.age > center.age && center.age < right.age
       "#{center.name} is younger than both #{left.name} and #{right.name}"
