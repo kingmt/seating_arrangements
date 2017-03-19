@@ -69,28 +69,70 @@ RSpec.describe TableRules do
     end
   end
 
+  describe 'move!' do
+    it 'moves Sam from the front to between Sara and Chris' do
+      seats = [sam_seat, michael_seat, sara_seat, chris_seat]
+      result = TableRules.move! seats, sam_seat, 3
+      # need to match internals since any new seat object created
+      # here won't be the same seat object created in place!
+      result_names = result.collect(&:name)
+      expect(result_names).to eq %w( Michael Sara Sam Chris)
+    end
+
+    it 'cannot move Sam to between Michael and Sara' do
+      seats = [sam_seat, michael_seat, sara_seat, chris_seat]
+      result = TableRules.move! seats, sam_seat, 2
+      expect(result).to eq nil
+    end
+  end
+
+  describe 'place!' do
+    it 'places Sam at the front' do
+      seats = [michael_seat, sara_seat, chris_seat]
+      result = TableRules.place! seats, sam, 1
+      # need to match internals since any new seat object created
+      # here won't be the same seat object created in place!
+      result_names = result.collect(&:name)
+      expect(result_names).to eq %w( Sam Michael Sara Chris)
+    end
+
+    it 'places Sam between Sara and Chris' do
+      seats = [michael_seat, sara_seat, chris_seat]
+      result = TableRules.place! seats, sam, 3
+      # need to match internals since any new seat object created
+      # here won't be the same seat object created in place!
+      result_names = result.collect(&:name)
+      expect(result_names).to eq %w( Michael Sara Sam Chris)
+    end
+
+    it 'cannot place Sam between Michael and Sara' do
+      seats = [michael_seat, sara_seat, chris_seat]
+      result = TableRules.place! seats, sam, 2
+      expect(result).to eq nil
+    end
+
+  end
+
   describe 'autoplace!' do
-    it 'places the new person at the front' do
+    it 'places Sam at the front' do
       seats = [michael_seat, sara_seat, chris_seat]
       result = TableRules.autoplace! seats, sam
       # need to match internals since any new seat object created
       # here won't be the same seat object created in autoplace!
-      expect(result[0].person).to eq sam
-      # remainder of seat list is unchanges
-      expect(result.slice(1,3)).to eq seats
+      result_names = result.collect(&:name)
+      expect(result_names).to eq %w( Sam Michael Sara Chris)
     end
 
-    it 'places the new person in the middle' do
+    it 'places Matt in the middle' do
       seats = [michael_seat, sara_seat, sam_seat, chris_seat]
       result = TableRules.autoplace! seats, matt
       # expect Matt to be between Sam and Chris
       # so first 3 seats are unchanged
-      expect(result.slice(0,3)).to eq seats.slice(0,3)
-      expect(result.last).to eq seats.last
-      expect(result[3].person).to eq matt
+      result_names = result.collect(&:name)
+      expect(result_names).to eq %w( Michael Sara Sam Matt Chris)
     end
 
-    it 'cannot place the new person' do
+    it 'cannot place John' do
       seats = [michael_seat, sara_seat, chris_seat]
       result = TableRules.autoplace! seats, john
       expect(result).to eq nil
