@@ -46,6 +46,7 @@ Respond with helpful error messages when updates cannot be performed.
 
 #### **Tables**
 
+
 * **Create Table**
   * POST /api/table
   * creates a new table and returns a JSON object containing the table's information
@@ -58,6 +59,8 @@ Respond with helpful error messages when updates cannot be performed.
   "seats": []
 }
 ```
+
+
 * **Get Table**
   * GET /api/tables/:id
   * returns a JSON object listing all the people at the table with their positions
@@ -72,6 +75,8 @@ Respond with helpful error messages when updates cannot be performed.
             {"id": 3, "name": "Paul", "age": 22, "can_be_unseated": true }]
 }
 ```
+
+
 * **Delete a Table**
   *   DELETE /api/tables/:id
   *   returns a 204 and unseats all the people who were at the table
@@ -79,6 +84,7 @@ Respond with helpful error messages when updates cannot be performed.
      id of the table
   * Response:
     empty body with a status code of 204
+
 
 * **Seat an Entire Table**
   * Update all people at the table required param is a list of all people to be seated at the table in position order
@@ -90,10 +96,11 @@ Respond with helpful error messages when updates cannot be performed.
   * Success Response:
     same as GET /api/table/:id
   * Error Response:
-    When some of the people are already seated at a different table
+    * When some of the people are already seated at a different table
     `{"errors": "Michael, Sam, and Sara have already been seated at another table"}`
-    When resulting table would be invalid
+    * When resulting table would be invalid
     `{"errors": "Unable to seat those people in that order"}`
+
 
 #### **People**
 * **Create a Person**
@@ -123,6 +130,7 @@ Error:
 
 ```
 
+
 * **Get All People**
   * GET /api/people
   * returns JSON object of all people in the system
@@ -145,6 +153,7 @@ Error:
        }]
 ```
 
+
 * **Get the Information About a Single Person**
   * GET /api/people/:id
   * returns JSON object of that person's information
@@ -154,6 +163,7 @@ Error:
     same as the response from creating a person
   * Error Response:
     404 status code when the person does not exist
+
 
 * **Update a Person**
   * PUT /api/people/:id
@@ -169,6 +179,7 @@ Error:
     404 status code when the person does not exist
     422 `{"errors": "Cannot update a seated person"}`
 
+
 * **Delete a Person**
   * DELETE /api/people/:id
   * removes the person from the system and responds with a status code of 204
@@ -181,6 +192,7 @@ Error:
   * Error Response:
     404 status code when the person does not exist
     422 `{"errors": "Cannot delete a seated person"}`
+
 
 #### **Seats**
 Adding and removing people from tables
@@ -199,6 +211,7 @@ Adding and removing people from tables
   * Error Response when position was given
     `{ "errors": "Person cannot be seated at that position" }`
 
+
 * **Change a person's position at the table**
   * PUT /api/tables/:table_id/seats/:id
   * returns a JSON object listing all the people at the table  with their positions or an error message
@@ -210,6 +223,7 @@ Adding and removing people from tables
   * Error Response:
    `{ "errors": "Person cannot be seated at that position" }`
 
+
 * **Remove a person from a table**
   * DELETE /api/tables/:table_id/seats/:id
   * Required Params:
@@ -220,11 +234,4 @@ Adding and removing people from tables
     `{ "errors": "Seat does not exist" }`
   * Error Responses for ineligible deletion
     `{ "errors": "Cannot remove the seat, the table would be invalid" }`
-
-
-
-
-
-
-
 
