@@ -67,9 +67,9 @@ returns a JSON object listing all the people at the table with their positions
 ```json
 {
   "id": 2,
-  "seats": [{"id" => 1, "name" => "Matt", "age" => 20, "can_be_unseated" => false},
-            {"id" => 2, "name" => "John", "age" => 20, "can_be_unseated" => false},
-            {"id" => 3, "name" => "Paul", "age" => 22, "can_be_unseated" => true }]
+  "seats": [{"id": 1, "name": "Matt", "age": 20, "can_be_unseated": false},
+            {"id": 2, "name": "John", "age": 20, "can_be_unseated": false},
+            {"id": 3, "name": "Paul", "age": 22, "can_be_unseated": true }]
 }
 ```
 * **Delete a Table**
@@ -104,19 +104,19 @@ returns a JSON object listing all the people at the table with their positions
 ```json
 Seated:
        {
-        "id" => 12,
-        "name" => "Joe",
-        "age" => 27,
-        "seated" => true,
-        "seated_at_table" => 2
+        "id": 12,
+        "name": "Joe",
+        "age": 27,
+        "seated": true,
+        "seated_at_table": 2
        }
 Unseated:
        {
-        "id" => 13,
-        "name" => "Sam",
-        "age" => 28,
-        "seated" => false,
-        "seated_at_table" => null
+        "id": 13,
+        "name": "Sam",
+        "age": 28,
+        "seated": false,
+        "seated_at_table": null
        }
 Error:
       {"errors": ["Age can't be blank"]}
@@ -130,18 +130,18 @@ GET /api/people
   * Response:
 ```json
       [{
-        "id" => 12,
-        "name" => "Joe",
-        "age" => 27,
-        "seated" => true,
-        "seated_at_table" => 2
+        "id": 12,
+        "name": "Joe",
+        "age": 27,
+        "seated": true,
+        "seated_at_table": 2
        },
        {
-        "id" => 13,
-        "name" => "Sam",
-        "age" => 26,
-        "seated" => false,
-        "seated_at_table" => null
+        "id": 13,
+        "name": "Sam",
+        "age": 26,
+        "seated": false,
+        "seated_at_table": null
        }]
 ```
 
