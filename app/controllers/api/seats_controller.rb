@@ -7,7 +7,8 @@ class Api::SeatsController < ApiController
   # 2 modes, autoplace and specified
   def create
     if params[:position]
-      if TableRules.place!(@table.seats.to_a, @person, params[:position].to_i)
+      new_seat = Seat.new table: @table, person: @person
+      if TableRules.place!(@table.seats.to_a, new_seat, params[:position].to_i)
         # found a seat
         @table.reload
         render json: @table
